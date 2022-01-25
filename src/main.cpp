@@ -11,6 +11,7 @@
 
 #include "demo_test.hpp"
 // NOTES: Placez vos includes ici et modifiez demoList dans le main(), et n'oubliez pas de modifier le Makefile
+#include "demo_renderer_basic.hpp"
 
 void debugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
 {
@@ -65,6 +66,7 @@ int main(int argc, char* argv[])
     Demo* demoList[] =
     {
         new DemoTest(),
+        new DemoRendererBasic(),
     };
 
     int demoIndex = 0; // Start index
