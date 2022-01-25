@@ -46,11 +46,8 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    if (GLAD_GL_KHR_debug)
-    {
-        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-        glDebugMessageCallback(debugCallback, NULL);
-    }
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+    glDebugMessageCallback(debugCallback, NULL);
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();

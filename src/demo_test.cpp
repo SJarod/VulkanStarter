@@ -16,6 +16,7 @@
 
 static void drawGizmo()
 {
+    /*
     glDisable(GL_DEPTH_TEST);
     glBegin(GL_LINES);
 
@@ -35,16 +36,19 @@ static void drawGizmo()
 
     glEnd();
     glEnable(GL_DEPTH_TEST);
+    */
 }
 
 static void drawQuad()
 {
+    /*
     glBegin(GL_QUADS);
     glVertex3f(-0.5f, -0.5f, 0.f);
     glVertex3f( 0.5f, -0.5f, 0.f);
     glVertex3f( 0.5f,  0.5f, 0.f);
     glVertex3f(-0.5f,  0.5f, 0.f);
     glEnd();
+    */
 }
 
 void DemoTest::display()
@@ -58,6 +62,7 @@ void DemoTest::display()
     glClearColor(0.f, 0.f, 0.f, 1.f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    /*
     // Projection
     glMatrixMode(GL_PROJECTION);
 
@@ -109,4 +114,5 @@ void DemoTest::display()
     glPopMatrix();
 
     glDisable(GL_DEPTH_TEST);
+    */
 }
