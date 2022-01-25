@@ -1,11 +1,21 @@
 #include "demo_renderer_basic.hpp"
 
+DemoRendererBasic::DemoRendererBasic()
+{
+	scene = new Scene(*(new RendererBasic()));
+}
+
 DemoRendererBasic::~DemoRendererBasic()
 {
+	delete scene;
 }
 
 void DemoRendererBasic::display()
 {
+	if (!scene)
+		return;
+
+	scene->UpdateAndRender();
 }
 
 RendererBasic::~RendererBasic()

@@ -11,7 +11,9 @@ private:
     Scene* scene;
 
 public:
+    DemoRendererBasic();
     ~DemoRendererBasic() override;
+
     const char* name() override { return "Renderer basic"; };
     void display() override;
 };

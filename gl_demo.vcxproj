@@ -108,6 +108,7 @@
     <ClCompile Include="src\demo_renderer_basic.cpp" />
     <ClCompile Include="src\demo_test.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\scene.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
