@@ -69,7 +69,7 @@ int main(int argc, char* argv[])
         new DemoRendererBasic(),
     };
 
-    int demoIndex = 0; // Start index
+    int demoIndex = 1; // Start index
     int demoCount = IM_ARRAYSIZE(demoList);
 
     while (glfwWindowShouldClose(window) == false)

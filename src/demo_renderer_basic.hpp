@@ -3,8 +3,13 @@
 #include "demo.hpp"
 #include "renderer_interface.hpp"
 
+#include "scene.hpp"
+
 class DemoRendererBasic : public Demo
 {
+private:
+    Scene* scene;
+
 public:
     ~DemoRendererBasic() override;
     const char* name() override { return "Renderer basic"; };

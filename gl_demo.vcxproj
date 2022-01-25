@@ -104,6 +104,7 @@
     <ClCompile Include="externals\src\imgui_tables.cpp" />
     <ClCompile Include="externals\src\imgui_impl_glfw.cpp" />
     <ClCompile Include="externals\src\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="externals\src\tiny_obj_loader.cpp" />
     <ClCompile Include="src\demo_renderer_basic.cpp" />
     <ClCompile Include="src\demo_test.cpp" />
     <ClCompile Include="src\main.cpp" />

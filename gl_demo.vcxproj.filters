@@ -44,6 +44,7 @@
       <Filter>externals</Filter>
     </ClCompile>
     <ClCompile Include="src\demo_renderer_basic.cpp" />
+    <ClCompile Include="externals\src\tiny_obj_loader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="externals">
