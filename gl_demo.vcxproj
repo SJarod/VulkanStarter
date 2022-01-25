@@ -89,6 +89,9 @@
     <ClInclude Include="src\demo.hpp" />
     <ClInclude Include="src\demo_test.hpp" />
     <ClInclude Include="src\maths.hpp" />
+    <ClInclude Include="src\object.hpp" />
+    <ClInclude Include="src\renderer_interface.hpp" />
+    <ClInclude Include="src\scene.hpp" />
     <ClInclude Include="src\types.hpp" />
   </ItemGroup>
   <ItemGroup>

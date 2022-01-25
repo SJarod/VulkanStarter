@@ -1,8 +1,30 @@
 #pragma once
 
+typedef unsigned int uint;
+
+struct float2
+{
+    float x;
+    float y;
+};
+
 struct float3
 {
     float x;
     float y;
     float z;
+};
+
+struct float4
+{
+    float x;
+    float y;
+    float z;
+    float w;
+};
+
+union mat4
+{
+    float4 c[4];
+    float e[16];
 };
