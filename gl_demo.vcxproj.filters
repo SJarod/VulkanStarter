@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="src\demo.hpp" />
+    <ClInclude Include="src\demo_primitives.hpp" />
+    <ClInclude Include="src\demo_test.hpp" />
+    <ClInclude Include="src\maths.hpp" />
+    <ClInclude Include="src\types.hpp" />
+    <ClInclude Include="externals\src\imstb_rectpack.h">
+      <Filter>externals</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\src\imstb_truetype.h">
+      <Filter>externals</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\demo_primitives.cpp" />
+    <ClCompile Include="src\demo_test.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="externals\src\imgui.cpp">
+      <Filter>externals</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\src\imgui_demo.cpp">
+      <Filter>externals</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\src\imgui_draw.cpp">
+      <Filter>externals</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\src\imgui_impl_glfw.cpp">
+      <Filter>externals</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\src\imgui_impl_opengl3.cpp">
+      <Filter>externals</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\src\imgui_widgets.cpp">
+      <Filter>externals</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\src\imgui_tables.cpp">
+      <Filter>externals</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\src\gl.c">
+      <Filter>externals</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="externals">
+      <UniqueIdentifier>{14db1f0a-2758-4097-a557-ed4892697b8c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

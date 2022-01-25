@@ -1,0 +1,27 @@
+# Visual Studio
+.vs
+.vscode
+*.user
+
+imgui.ini
+
+# resources
+[Aa]ssets
+[Rr]esources
+*.obj
+*.png
+*.jpg
+
+# Build results
+[Dd]ebug
+[Rr]elease
+[Rr]eleases
+x64
+
+# git merge original files
+*.orig
+
+# archives
+*.zip
+*.rar
+*.7z
