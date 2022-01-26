@@ -58,7 +58,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\shader\basic.vs" />
-    <None Include="resources\shader\basic.fs" />
+    <None Include="resources\shaders\basic.vs" />
+    <None Include="resources\shaders\basic.fs" />
   </ItemGroup>
 </Project>

@@ -21,8 +21,15 @@ Scene::Scene(RendererInterface& renderer)
     meshes.push_back(std::make_unique<Mesh>(quad));
 
     //parts
+    Part part = {
+        meshes.back().get(),
+        nullptr,
+        mat4::identity
+    };
 
     //objects
+    staticObjects.push_back({ { part } });
+    renderer.SetStaticObjects(staticObjects);
 }
 
 Scene::~Scene()

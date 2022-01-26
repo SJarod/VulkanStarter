@@ -18,7 +18,9 @@ struct GPUMaterialBasic : GPUMaterial
 class RendererBasic : public RendererInterface
 {
 private:
-    GLuint program;
+    GLuint program = 0;
+
+    std::vector<Object> staticObjects;
 
 public:
     RendererBasic(const char* shader);
