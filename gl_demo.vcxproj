@@ -90,7 +90,9 @@
     <ClInclude Include="src\demo_renderer_basic.hpp" />
     <ClInclude Include="src\demo_test.hpp" />
     <ClInclude Include="src\maths.hpp" />
+    <ClInclude Include="src\memleaks.hpp" />
     <ClInclude Include="src\object.hpp" />
+    <ClInclude Include="src\renderer_basic.hpp" />
     <ClInclude Include="src\renderer_interface.hpp" />
     <ClInclude Include="src\scene.hpp" />
     <ClInclude Include="src\types.hpp" />
@@ -108,7 +110,14 @@
     <ClCompile Include="src\demo_renderer_basic.cpp" />
     <ClCompile Include="src\demo_test.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\memleaks.cpp" />
+    <ClCompile Include="src\renderer_basic.cpp" />
     <ClCompile Include="src\scene.cpp" />
+    <ClCompile Include="src\types.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\shader\basic.fs" />
+    <None Include="resources\shader\basic.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

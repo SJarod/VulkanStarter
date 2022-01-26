@@ -1,8 +1,8 @@
 #pragma once
+                              
+#include <vector>
 
 #include "types.hpp"
-
-#include <vector>
 
 // Base classes to override for each renderer
 struct GPUMesh {};
@@ -17,28 +17,33 @@ struct Vertex
     float2 uv0;
 };
 
+//stores cpu and gpu version of mesh
 struct Mesh
 {
+    //cpu
     std::vector<Vertex> vertices;
     std::vector<uint> indices;
+    //gpu
     GPUMesh* gpu;
 };
 
 struct Texture
 {
+    //cpu
     int width;
     int height;
     int bpp;
     void* data; // On va dire qu'on supporte seulement UNSIGNED_BYTE
-
+    //gpu
     GPUTexture* gpu;
 };
 
 struct Material
 {
+    //cpu
     float4 diffuseColor;
     Texture* diffuseTexture;
-
+    //gpu
     GPUMaterial* gpu;
 };
 

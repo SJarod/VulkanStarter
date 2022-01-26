@@ -7,7 +7,6 @@ imgui.ini
 
 # resources
 [Aa]ssets
-[Rr]esources
 *.obj
 *.png
 *.jpg

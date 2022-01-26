@@ -1,8 +1,8 @@
 #pragma once
 
-#include "renderer_interface.hpp"
-
 #include <memory>
+
+#include "renderer_interface.hpp"
 
 class Scene
 {
