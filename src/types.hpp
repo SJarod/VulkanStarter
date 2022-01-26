@@ -8,19 +8,20 @@ struct float2
     float y;
 };
 
-struct float3
+union float3
 {
-    float x;
-    float y;
-    float z;
+    struct { float x, y, z; };
+    float e[3];
+    float2 xy;
+
+    static const float3 zero;
 };
 
-struct float4
+union float4
 {
-    float x;
-    float y;
-    float z;
-    float w;
+    struct { float x, y, z, w; };
+    float e[4];
+    float3 xyz;
 };
 
 typedef float2 vec2;

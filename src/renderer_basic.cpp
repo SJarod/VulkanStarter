@@ -6,6 +6,8 @@
 #include "renderer_basic.hpp"
 #include "memleaks.hpp"
 
+#include "maths.hpp"
+
 RendererBasic::RendererBasic(const char* shader)
 {
 	std::string filename = shader;
@@ -82,7 +84,13 @@ void RendererBasic::SetStaticObjects(const std::vector<Object>& staticObjects)
 
 void RendererBasic::RenderAll(const mat4& proj, const mat4& view, const std::vector<Object>& dynamicObjects, const std::vector<Light>& lights)
 {
+	glEnable(GL_DEPTH_TEST);
+
+	glClearColor(0.f, 0.f, 0.f, 1.f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	glUseProgram(program);
+	glUniformMatrix4fv(glGetUniformLocation(program, "uVP"), 1, GL_TRUE, (proj * view).e);
 
 	for (const Object& obj : staticObjects)
 	{
@@ -90,6 +98,7 @@ void RendererBasic::RenderAll(const mat4& proj, const mat4& view, const std::vec
 		{
 			glBindVertexArray((static_cast<GPUMeshBasic*>(p.mesh->gpu))->VAO);
 			glDrawArrays(GL_TRIANGLES, 0, (GLsizei)p.mesh->vertices.size());
+			glUniformMatrix4fv(glGetUniformLocation(program, "uModel"), 1, GL_TRUE, p.localMatrix.e);
 			glBindVertexArray(0);
 		}
 	}
@@ -100,9 +109,12 @@ void RendererBasic::RenderAll(const mat4& proj, const mat4& view, const std::vec
 		{
 			glBindVertexArray((static_cast<GPUMeshBasic*>(p.mesh->gpu))->VAO);
 			glDrawArrays(GL_TRIANGLES, 0, (GLsizei)p.mesh->vertices.size());
+			glUniformMatrix4fv(glGetUniformLocation(program, "uModel"), 1, GL_TRUE, p.localMatrix.e);
 			glBindVertexArray(0);
 		}
 	}
+
+	glDisable(GL_DEPTH_TEST);
 }
 
 GPUMesh* RendererBasic::CreateMesh(const Mesh& mesh)

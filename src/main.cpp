@@ -33,9 +33,9 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    // Target OpenGL 3.0 API in Compatibility mode
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    // Target OpenGL 4.5 API in Compatibility mode
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 
     GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "GLFW test", nullptr, nullptr);
     if (window == nullptr)
