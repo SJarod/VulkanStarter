@@ -97,8 +97,8 @@ void RendererBasic::RenderAll(const mat4& proj, const mat4& view, const std::vec
 		for (const Part& p : obj.parts)
 		{
 			glBindVertexArray((static_cast<GPUMeshBasic*>(p.mesh->gpu))->VAO);
-			glDrawArrays(GL_TRIANGLES, 0, (GLsizei)p.mesh->vertices.size());
 			glUniformMatrix4fv(glGetUniformLocation(program, "uModel"), 1, GL_TRUE, p.localMatrix.e);
+			glDrawElements(GL_TRIANGLES, p.mesh->indices.size(), GL_UNSIGNED_INT, (void*)0);
 			glBindVertexArray(0);
 		}
 	}
@@ -108,8 +108,8 @@ void RendererBasic::RenderAll(const mat4& proj, const mat4& view, const std::vec
 		for (const Part& p : obj.parts)
 		{
 			glBindVertexArray((static_cast<GPUMeshBasic*>(p.mesh->gpu))->VAO);
-			glDrawArrays(GL_TRIANGLES, 0, (GLsizei)p.mesh->vertices.size());
 			glUniformMatrix4fv(glGetUniformLocation(program, "uModel"), 1, GL_TRUE, p.localMatrix.e);
+			glDrawElements(GL_TRIANGLES, p.mesh->indices.size(), GL_UNSIGNED_INT, (void*)0);
 			glBindVertexArray(0);
 		}
 	}
@@ -126,8 +126,13 @@ GPUMesh* RendererBasic::CreateMesh(const Mesh& mesh)
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, mesh.vertices.size() * sizeof(Vertex), mesh.vertices.data(), GL_STATIC_DRAW);
 
+	GLuint EBO;
+	glGenBuffers(1, &EBO);
+
 	glGenVertexArrays(1, &gpu->VAO);
 	glBindVertexArray(gpu->VAO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.indices.size() * sizeof(uint), mesh.indices.data(), GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
 	glEnableVertexAttribArray(1);
@@ -137,6 +142,7 @@ GPUMesh* RendererBasic::CreateMesh(const Mesh& mesh)
 	glBindVertexArray(0);
 
 	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);
 
 	return gpu;
 }

@@ -36,7 +36,7 @@ Scene::Scene(RendererInterface& renderer)
 		  renderer.CreateMesh(triangle)
 	};
 
-	meshes.push_back(std::make_unique<Mesh>(triangle));
+	meshes.push_back(std::make_unique<Mesh>(quad));
 
 	//parts
 	Part part = {
