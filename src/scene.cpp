@@ -22,6 +22,15 @@ Scene::Scene(RendererInterface& renderer)
 		  renderer.CreateMesh(quad)
 	};
 
+	meshes.push_back(std::make_unique<Mesh>(quad));
+
+	//parts
+	Part part = {
+		meshes.back().get(),
+		nullptr,
+		m4::translateMatrix({0.f, 0.f, -1.f})
+	};
+
 	//simple triangle
 	Mesh triangle = {
 		//vertices
@@ -36,17 +45,16 @@ Scene::Scene(RendererInterface& renderer)
 		  renderer.CreateMesh(triangle)
 	};
 
-	meshes.push_back(std::make_unique<Mesh>(quad));
+	meshes.push_back(std::make_unique<Mesh>(triangle));
 
-	//parts
-	Part part = {
+	Part part2 = {
 		meshes.back().get(),
 		nullptr,
 		mat4::identity
 	};
 
 	//objects
-	staticObjects.push_back({ { part } });
+	staticObjects.push_back({ { part, part2 } });
 	renderer.SetStaticObjects(staticObjects);
 }
 
