@@ -74,13 +74,13 @@ void Scene::UpdateAndRender()
 	mat4 perspective = m4::perspective(fovY, aspect, 0.1f, 1000.f);
 
 	// Setup camera position
-	static vec3 camPos = { 0.f, 0.f, -1.f };
+	static vec3 camPos = { 0.f, 0.f, 1.f };
 	ImGui::DragFloat3("camera position", camPos.e, 0.01f);
 	static float pitch = 0.f;
 	ImGui::DragFloat("pitch", &pitch, 0.1f);
 	static float yaw = 0.f;
 	ImGui::DragFloat("yaw", &yaw, 0.1f);
-	mat4 view = m4::rotateXMatrix(pitch) * m4::rotateYMatrix(yaw) * m4::translateMatrix(camPos);
+	mat4 view = m4::rotateXMatrix(pitch) * m4::rotateYMatrix(-yaw) * m4::translateMatrix(-camPos);
 
 	renderer.RenderAll(perspective, view, dynamicObjects, lights);
 }

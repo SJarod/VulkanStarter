@@ -4,6 +4,11 @@
 
 #include "types.hpp"
 
+inline float3 operator-(float3 a)
+{
+	return { -a.x, -a.y, -a.z };
+}
+
 inline float3 operator-(float3 a, float3 b)
 {
     return { a.x - b.x, a.y - b.y, a.z - b.z };
