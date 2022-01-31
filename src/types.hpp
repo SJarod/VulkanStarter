@@ -6,6 +6,8 @@ struct float2
 {
     float x;
     float y;
+
+    static const float2 zero;
 };
 
 union float3
