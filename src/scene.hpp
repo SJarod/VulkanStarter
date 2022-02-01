@@ -24,4 +24,6 @@ private:
 
     std::vector<std::unique_ptr<Mesh>> meshes;
     std::vector<std::unique_ptr<Texture>> textures;
+
+    void loadObj(const char* filename, std::vector<Vertex>& vertices, std::vector<uint>& indices) const;
 };

@@ -121,17 +121,15 @@ GPUMesh* RendererBasic::CreateMesh(const Mesh& mesh)
 {
 	GPUMeshBasic* gpu = new GPUMeshBasic();
 
-	GLuint VBO;
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glGenBuffers(1, &gpu->VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, gpu->VBO);
 	glBufferData(GL_ARRAY_BUFFER, mesh.vertices.size() * sizeof(Vertex), mesh.vertices.data(), GL_STATIC_DRAW);
 
-	GLuint EBO;
-	glGenBuffers(1, &EBO);
+	glGenBuffers(1, &gpu->EBO);
 
 	glGenVertexArrays(1, &gpu->VAO);
 	glBindVertexArray(gpu->VAO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpu->EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.indices.size() * sizeof(uint), mesh.indices.data(), GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
@@ -141,8 +139,8 @@ GPUMesh* RendererBasic::CreateMesh(const Mesh& mesh)
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(2 * sizeof(vec3)));
 	glBindVertexArray(0);
 
-	glDeleteBuffers(1, &VBO);
-	glDeleteBuffers(1, &EBO);
+	//glDeleteBuffers(1, &VBO);
+	//glDeleteBuffers(1, &EBO);
 
 	return gpu;
 }

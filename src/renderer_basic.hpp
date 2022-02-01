@@ -4,7 +4,14 @@
 
 struct GPUMeshBasic : GPUMesh
 {
+    GLuint VBO, EBO;
     GLuint VAO;
+
+    ~GPUMeshBasic()
+    {
+        glDeleteBuffers(1, &VBO);
+        glDeleteBuffers(1, &EBO);
+    }
 };
 
 struct GPUTextureBasic : GPUTexture

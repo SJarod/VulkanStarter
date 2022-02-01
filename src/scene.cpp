@@ -10,38 +10,9 @@
 Scene::Scene(RendererInterface& renderer)
 	: renderer(renderer)
 {
-	std::string Warn;
-	std::string Err;
-	tinyobj::attrib_t Attrib;
-	std::vector<tinyobj::shape_t> Shapes;
-
-	std::string filename = "assets/teapot.obj";
-	if (tinyobj::LoadObj(&Attrib, &Shapes, nullptr, &Warn, &Err, "assets/fantasy_game_inn.obj", "assets/", true))
-		std::cout << "successfully loaded object : " << filename << std::endl;
-	else
-		std::cout << "could not load object : " << filename << std::endl;
-
 	std::vector<Vertex> fileVertices;
-	for (int i = 0; i < Attrib.vertices.size() / 3; ++i)
-	{
-		vec3 v = { Attrib.vertices[i * 3 + 0], Attrib.vertices[i * 3 + 1], Attrib.vertices[i * 3 + 2] };
-		vec3 n = vec3::zero;
-		if (!Attrib.normals.empty() && i < Attrib.normals.size() / 3)
-			n = { Attrib.normals[i], Attrib.normals[i + 1], Attrib.normals[i + 2] };
-		vec2 u = vec2::zero;
-		if (!Attrib.texcoords.empty() && i < Attrib.texcoords.size() / 3)
-			u = { Attrib.texcoords[i], Attrib.texcoords[i + 1] };
-
-		fileVertices.push_back({ v, n, u });
-	}
 	std::vector<uint> fileIndices;
-	for (tinyobj::shape_t& sh : Shapes)
-	{
-		for (tinyobj::index_t& ind : sh.mesh.indices)
-		{
-			fileIndices.push_back(ind.vertex_index);
-		}
-	}
+	loadObj("teapot.obj", fileVertices, fileIndices);
 
 	Mesh fileMesh = {
 		fileVertices,
@@ -135,4 +106,41 @@ void Scene::UpdateAndRender()
 	mat4 view = m4::translateMatrix(-camPos) * m4::rotateXMatrix(pitch) * m4::rotateYMatrix(-yaw);
 
 	renderer.RenderAll(perspective, view, dynamicObjects, lights);
+}
+
+void Scene::loadObj(const char* filename, std::vector<Vertex>& vertices, std::vector<uint>& indices) const
+{
+	std::string Warn;
+	std::string Err;
+	tinyobj::attrib_t Attrib;
+	std::vector<tinyobj::shape_t> Shapes;
+
+	std::string file = filename;
+	file = "assets/" + file;
+
+	if (tinyobj::LoadObj(&Attrib, &Shapes, nullptr, &Warn, &Err, file.c_str(), "assets/", true))
+		std::cout << "successfully loaded object : " << filename << std::endl;
+	else
+		std::cout << "could not load object : " << filename << std::endl;
+
+	for (int i = 0; i < Attrib.vertices.size() / 3; ++i)
+	{
+		vec3 v = { Attrib.vertices[i * 3 + 0], Attrib.vertices[i * 3 + 1], Attrib.vertices[i * 3 + 2] };
+		vec3 n = vec3::zero;
+		if (!Attrib.normals.empty() && i < Attrib.normals.size() / 3)
+			n = { Attrib.normals[i], Attrib.normals[i + 1], Attrib.normals[i + 2] };
+		vec2 u = vec2::zero;
+		if (!Attrib.texcoords.empty() && i < Attrib.texcoords.size() / 3)
+			u = { Attrib.texcoords[i], Attrib.texcoords[i + 1] };
+
+		vertices.push_back({ v, n, u });
+	}
+
+	for (tinyobj::shape_t& sh : Shapes)
+	{
+		for (tinyobj::index_t& ind : sh.mesh.indices)
+		{
+			indices.push_back(ind.vertex_index);
+		}
+	}
 }
