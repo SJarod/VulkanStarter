@@ -28,13 +28,14 @@ inline mat4 operator*(const mat4& m, const mat4& m2)
 {
 	mat4 temp = {};
 
+	
 	for (int i = 0; i < 4; ++i)
 	{
 		for (int j = 0; j < 4; ++j)
 		{
 			for (int k = 0; k < 4; ++k)
 			{
-				temp.c[i].e[j] += m.c[i].e[k] * m2.e[k * 4 + j];
+				temp.r[j].e[i] += m.r[k].e[i] * m2.e[j * 4 + k];
 			}
 		}
 	}
@@ -80,10 +81,10 @@ namespace m4
 	inline mat4 frustum(const float& left, const float& right, const float& bot, const float& top, const float& near, const float& far)
 	{
 		mat4 frs;
-		frs.c[0] = { (2 * near) / (right - left), 0.f, 0.f, -near * (right + left) / (right - left) };
-		frs.c[1] = { 0.f, (2 * near) / (top - bot), 0.f, -near * (top + bot) / (top - bot) };
-		frs.c[2] = { 0.f, 0.f, -(far + near) / (far - near), -(2 * far * near) / (far - near) };
-		frs.c[3] = { 0.f, 0.f, -1.f, 0.f };
+		frs.r[0] = { (2 * near) / (right - left), 0.f, 0.f, -near * (right + left) / (right - left) };
+		frs.r[1] = { 0.f, (2 * near) / (top - bot), 0.f, -near * (top + bot) / (top - bot) };
+		frs.r[2] = { 0.f, 0.f, -(far + near) / (far - near), -(2 * far * near) / (far - near) };
+		frs.r[3] = { 0.f, 0.f, -1.f, 0.f };
 		return frs;
 	}
 
@@ -98,10 +99,10 @@ namespace m4
 	inline mat4 orthographic(const float& left, const float& right, const float& bot, const float& top, const float& near, const float& far)
 	{
 		mat4 orth;
-		orth.c[0] = { 2 / (right - left), 0.f, 0.f, -(right + left) / (right - left) };
-		orth.c[1] = { 0.f, 2 / (top - bot), 0.f, -(top + bot) / (top - bot) };
-		orth.c[2] = { 0.f, 0.f, -2 / (far - near), -(far + near) / (far - near) };
-		orth.c[3] = { 0.f, 0.f, 0.f, 1.f };
+		orth.r[0] = { 2 / (right - left), 0.f, 0.f, -(right + left) / (right - left) };
+		orth.r[1] = { 0.f, 2 / (top - bot), 0.f, -(top + bot) / (top - bot) };
+		orth.r[2] = { 0.f, 0.f, -2 / (far - near), -(far + near) / (far - near) };
+		orth.r[3] = { 0.f, 0.f, 0.f, 1.f };
 		return orth;
 	}
 

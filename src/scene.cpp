@@ -121,6 +121,7 @@ void Scene::UpdateAndRender()
 {
 	// Setup a perspective projection matrix
 	static float fovY = 90.f;
+	ImGui::DragFloat("fovY", &fovY, 0.1f);
 	static float aspect = 16.f / 9.f;
 	mat4 perspective = m4::perspective(fovY, aspect, 0.1f, 1000.f);
 
@@ -131,7 +132,7 @@ void Scene::UpdateAndRender()
 	ImGui::DragFloat("pitch", &pitch, 0.1f);
 	static float yaw = 0.f;
 	ImGui::DragFloat("yaw", &yaw, 0.1f);
-	mat4 view = m4::rotateXMatrix(pitch) * m4::rotateYMatrix(-yaw) * m4::translateMatrix(-camPos);
+	mat4 view = m4::translateMatrix(-camPos) * m4::rotateXMatrix(pitch) * m4::rotateYMatrix(-yaw);
 
 	renderer.RenderAll(perspective, view, dynamicObjects, lights);
 }

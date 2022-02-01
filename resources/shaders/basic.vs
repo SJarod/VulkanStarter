@@ -14,5 +14,5 @@ void main()
 	vNormal = aNormal;
 	vUV = aUV;
 
-	gl_Position = uVP * uModel * vec4(aPos, 1.0);
+	gl_Position = vec4(aPos, 1.0) * uModel * uVP;
 }

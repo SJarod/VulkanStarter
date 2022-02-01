@@ -90,14 +90,14 @@ void RendererBasic::RenderAll(const mat4& proj, const mat4& view, const std::vec
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glUseProgram(program);
-	glUniformMatrix4fv(glGetUniformLocation(program, "uVP"), 1, GL_TRUE, (proj * view).e);
+	glUniformMatrix4fv(glGetUniformLocation(program, "uVP"), 1, GL_FALSE, (view * proj).e);
 
 	for (const Object& obj : staticObjects)
 	{
 		for (const Part& p : obj.parts)
 		{
 			glBindVertexArray((static_cast<GPUMeshBasic*>(p.mesh->gpu))->VAO);
-			glUniformMatrix4fv(glGetUniformLocation(program, "uModel"), 1, GL_TRUE, p.localMatrix.e);
+			glUniformMatrix4fv(glGetUniformLocation(program, "uModel"), 1, GL_FALSE, p.localMatrix.e);
 			glDrawElements(GL_TRIANGLES, p.mesh->indices.size(), GL_UNSIGNED_INT, (void*)0);
 			glBindVertexArray(0);
 		}
@@ -108,7 +108,7 @@ void RendererBasic::RenderAll(const mat4& proj, const mat4& view, const std::vec
 		for (const Part& p : obj.parts)
 		{
 			glBindVertexArray((static_cast<GPUMeshBasic*>(p.mesh->gpu))->VAO);
-			glUniformMatrix4fv(glGetUniformLocation(program, "uModel"), 1, GL_TRUE, p.localMatrix.e);
+			glUniformMatrix4fv(glGetUniformLocation(program, "uModel"), 1, GL_FALSE, p.localMatrix.e);
 			glDrawElements(GL_TRIANGLES, p.mesh->indices.size(), GL_UNSIGNED_INT, (void*)0);
 			glBindVertexArray(0);
 		}
