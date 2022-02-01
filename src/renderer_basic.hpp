@@ -16,6 +16,7 @@ struct GPUMeshBasic : GPUMesh
 
 struct GPUTextureBasic : GPUTexture
 {
+    GLuint data;
 };
 
 struct GPUMaterialBasic : GPUMaterial

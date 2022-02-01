@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <imgui.h>
+#include "stb_image.h"
 
 #include "tiny_obj_loader.h"
 #include "maths.hpp"
@@ -12,7 +13,7 @@ Scene::Scene(RendererInterface& renderer)
 {
 	std::vector<Vertex> fileVertices;
 	std::vector<uint> fileIndices;
-	loadObj("teapot.obj", fileVertices, fileIndices);
+	loadObj("fantasy_game_inn.obj", fileVertices, fileIndices);
 
 	Mesh fileMesh = {
 		fileVertices,
@@ -21,6 +22,15 @@ Scene::Scene(RendererInterface& renderer)
 	};
 
 	meshes.push_back(std::make_unique<Mesh>(fileMesh));
+
+	Texture tex;
+	tex.data = loadTexture("fantasy_game_inn_diffuse.png", tex.width, tex.height, tex.bpp);
+	tex.gpu = renderer.CreateTexture(tex);
+
+	textures.push_back(std::make_unique<Texture>(tex));
+
+	Material* mat = new Material();
+	mat->diffuseTexture = textures.back().get();
 
 	Part filePart = {
 		meshes.back().get(),
@@ -48,7 +58,7 @@ Scene::Scene(RendererInterface& renderer)
 	//parts
 	Part part = {
 		meshes.back().get(),
-		nullptr,
+		mat,
 		m4::translateMatrix({0.f, 0.f, -1.f})
 	};
 
@@ -85,6 +95,9 @@ Scene::~Scene()
 	for (int i = 0; i < meshes.size(); ++i)
 		delete meshes[i]->gpu;
 
+	//for (int i = 0; i < textures.size(); ++i)
+	//	delete textures[i]->gpu;
+
 	delete& renderer;
 }
 
@@ -103,22 +116,22 @@ void Scene::UpdateAndRender()
 	ImGui::DragFloat("pitch", &pitch, 0.1f);
 	static float yaw = 0.f;
 	ImGui::DragFloat("yaw", &yaw, 0.1f);
-	mat4 view = m4::translateMatrix(-camPos) * m4::rotateXMatrix(pitch) * m4::rotateYMatrix(-yaw);
+	mat4 view = m4::translateMatrix(-camPos) * m4::rotateYMatrix(-yaw) * m4::rotateXMatrix(pitch);
 
 	renderer.RenderAll(perspective, view, dynamicObjects, lights);
 }
 
-void Scene::loadObj(const char* filename, std::vector<Vertex>& vertices, std::vector<uint>& indices) const
+void Scene::loadObj(const char* mesh, std::vector<Vertex>& vertices, std::vector<uint>& indices) const
 {
 	std::string Warn;
 	std::string Err;
 	tinyobj::attrib_t Attrib;
 	std::vector<tinyobj::shape_t> Shapes;
 
-	std::string file = filename;
-	file = "assets/" + file;
+	std::string filename = mesh;
+	filename = "assets/" + filename;
 
-	if (tinyobj::LoadObj(&Attrib, &Shapes, nullptr, &Warn, &Err, file.c_str(), "assets/", true))
+	if (tinyobj::LoadObj(&Attrib, &Shapes, nullptr, &Warn, &Err, filename.c_str(), "assets/", true))
 		std::cout << "successfully loaded object : " << filename << std::endl;
 	else
 		std::cout << "could not load object : " << filename << std::endl;
@@ -142,5 +155,26 @@ void Scene::loadObj(const char* filename, std::vector<Vertex>& vertices, std::ve
 		{
 			indices.push_back(ind.vertex_index);
 		}
+	}
+}
+
+unsigned char* Scene::loadTexture(const char* texture, int& width, int& height, int& bpp) const
+{
+	std::string filename = texture;
+	filename = "assets/" + filename;
+
+	stbi_set_flip_vertically_on_load(true);
+	unsigned char* data = new unsigned char();
+	data = stbi_load(filename.c_str(), &width, &height, &bpp, 0);
+
+	if (data)
+	{
+		std::cout << "successfully loaded texture file : " << filename << std::endl;
+		return data;
+	}
+	else
+	{
+		std::cout << "could not load texture file : " << filename << std::endl;
+		return nullptr;
 	}
 }

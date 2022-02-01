@@ -98,7 +98,10 @@ void RendererBasic::RenderAll(const mat4& proj, const mat4& view, const std::vec
 		{
 			glBindVertexArray((static_cast<GPUMeshBasic*>(p.mesh->gpu))->VAO);
 			glUniformMatrix4fv(glGetUniformLocation(program, "uModel"), 1, GL_FALSE, p.localMatrix.e);
+			if (p.material)
+				glBindTexture(GL_TEXTURE_2D, (static_cast<GPUTextureBasic*>(p.material->diffuseTexture->gpu))->data);
 			glDrawElements(GL_TRIANGLES, p.mesh->indices.size(), GL_UNSIGNED_INT, (void*)0);
+			glBindTexture(GL_TEXTURE_2D, 0);
 			glBindVertexArray(0);
 		}
 	}
@@ -152,5 +155,20 @@ GPUMaterial* RendererBasic::CreateMaterial(const Material& material)
 
 GPUTexture* RendererBasic::CreateTexture(const Texture& texture)
 {
-	return nullptr;
+	GPUTextureBasic* gpu = new GPUTextureBasic();
+
+	glGenTextures(1, &gpu->data);
+
+	glBindTexture(GL_TEXTURE_2D, gpu->data);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	if (texture.data)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texture.width, texture.height, 0, GL_RGB, GL_UNSIGNED_BYTE, texture.data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+
+	return gpu;
 }

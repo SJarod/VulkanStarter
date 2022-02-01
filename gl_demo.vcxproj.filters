@@ -17,6 +17,7 @@
     <ClInclude Include="src\demo_renderer_basic.hpp" />
     <ClInclude Include="src\renderer_basic.hpp" />
     <ClInclude Include="src\memleaks.hpp" />
+    <ClInclude Include="src\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\demo_test.cpp" />
@@ -51,6 +52,7 @@
     <ClCompile Include="src\renderer_basic.cpp" />
     <ClCompile Include="src\types.cpp" />
     <ClCompile Include="src\memleaks.cpp" />
+    <ClCompile Include="src\stb_image.c" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="externals">

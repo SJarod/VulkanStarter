@@ -95,6 +95,7 @@
     <ClInclude Include="src\renderer_basic.hpp" />
     <ClInclude Include="src\renderer_interface.hpp" />
     <ClInclude Include="src\scene.hpp" />
+    <ClInclude Include="src\stb_image.h" />
     <ClInclude Include="src\types.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -113,6 +114,7 @@
     <ClCompile Include="src\memleaks.cpp" />
     <ClCompile Include="src\renderer_basic.cpp" />
     <ClCompile Include="src\scene.cpp" />
+    <ClCompile Include="src\stb_image.c" />
     <ClCompile Include="src\types.cpp" />
   </ItemGroup>
   <ItemGroup>
