@@ -5,6 +5,7 @@
 
 #include "tiny_obj_loader.h"
 #include "maths.hpp"
+#include "memleaks.hpp"
 
 #include "scene.hpp"
 
@@ -24,7 +25,7 @@ Scene::Scene(RendererInterface& renderer)
 	meshes.push_back(std::make_unique<Mesh>(fileMesh));
 
 	Texture tex;
-	tex.data = loadTexture("fantasy_game_inn_diffuse.png", tex.width, tex.height, tex.bpp);
+	tex.data = loadTexture("fantasy_game_inn_diffuse.png", tex.width, tex.height, tex.bpp, true);
 	tex.gpu = renderer.CreateTexture(tex);
 
 	textures.push_back(std::make_unique<Texture>(tex));
@@ -34,7 +35,7 @@ Scene::Scene(RendererInterface& renderer)
 
 	Part filePart = {
 		meshes.back().get(),
-		nullptr,
+		mat,
 		mat4::identity
 	};
 
@@ -58,7 +59,7 @@ Scene::Scene(RendererInterface& renderer)
 	//parts
 	Part part = {
 		meshes.back().get(),
-		mat,
+		nullptr,
 		m4::translateMatrix({0.f, 0.f, -1.f})
 	};
 
@@ -95,8 +96,29 @@ Scene::~Scene()
 	for (int i = 0; i < meshes.size(); ++i)
 		delete meshes[i]->gpu;
 
-	//for (int i = 0; i < textures.size(); ++i)
-	//	delete textures[i]->gpu;
+	for (int i = 0; i < textures.size(); ++i)
+	{
+		stbi_image_free(textures[i]->data);
+		delete textures[i]->gpu;
+	}
+
+	for (Object& obj : staticObjects)
+	{
+		for (Part& p : obj.parts)
+		{
+			if (p.material)
+				delete p.material;
+		}
+	}
+
+	for (Object& obj : dynamicObjects)
+	{
+		for (Part& p : obj.parts)
+		{
+			if (p.material)
+				delete p.material;
+		}
+	}
 
 	delete& renderer;
 }
@@ -158,13 +180,13 @@ void Scene::loadObj(const char* mesh, std::vector<Vertex>& vertices, std::vector
 	}
 }
 
-unsigned char* Scene::loadTexture(const char* texture, int& width, int& height, int& bpp) const
+unsigned char* Scene::loadTexture(const char* texture, int& width, int& height, int& bpp, const bool flip) const
 {
 	std::string filename = texture;
 	filename = "assets/" + filename;
 
-	stbi_set_flip_vertically_on_load(true);
-	unsigned char* data = new unsigned char();
+	stbi_set_flip_vertically_on_load(flip);
+	unsigned char* data;
 	data = stbi_load(filename.c_str(), &width, &height, &bpp, 0);
 
 	if (data)
