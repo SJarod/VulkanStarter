@@ -25,6 +25,10 @@ private:
     std::vector<std::unique_ptr<Mesh>> meshes;
     std::vector<std::unique_ptr<Texture>> textures;
 
-    void loadObj(const char* filename, std::vector<Vertex>& vertices) const;
-    unsigned char* loadTexture(const char* texture, int& width, int& height, int& bpp, const bool flip) const;
+    Mesh*           makeMesh(const char* filename);
+    Material*       makeMaterial(const char* filename);
+    Part            makePart(Mesh* mesh, Material* mat, const vec3& t, const vec3& r, const vec3& s) const;
+
+    void            loadObj(const char* filename, std::vector<Vertex>& vertices) const;
+    unsigned char*  loadTexture(const char* texture, int& width, int& height, int& bpp, const bool flip) const;
 };

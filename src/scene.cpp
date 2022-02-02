@@ -12,76 +12,12 @@
 Scene::Scene(RendererInterface& renderer)
 	: renderer(renderer)
 {
-	std::vector<Vertex> fileVertices;
-	loadObj("fantasy_game_inn.obj", fileVertices);
-
-	Mesh fileMesh = {
-		fileVertices,
-		renderer.CreateMesh(fileMesh)
-	};
-
-	meshes.push_back(std::make_unique<Mesh>(fileMesh));
-
-	Texture tex;
-	tex.data = loadTexture("fantasy_game_inn_diffuse.png", tex.width, tex.height, tex.bpp, true);
-	tex.gpu = renderer.CreateTexture(tex);
-
-	textures.push_back(std::make_unique<Texture>(tex));
-
-	Material* mat = new Material();
-	mat->diffuseTexture = textures.back().get();
-
-	Part filePart = {
-		meshes.back().get(),
-		mat,
-		mat4::identity
-	};
-
-	//simple quad
-	Mesh quad = {
-		//vertices
-		{ { { 0.f, 0.f, 0.f }, { 0.f, 0.f, 1.f }, { 0.f, 0.f } },
-		  { { 1.f, 0.f, 0.f }, { 0.f, 0.f, 1.f }, { 1.f, 0.f } },
-		  { { 0.f, 1.f, 0.f }, { 0.f, 0.f, 1.f }, { 0.f, 1.f } },
-		  { { 1.f, 0.f, 0.f }, { 0.f, 0.f, 1.f }, { 1.f, 0.f } },
-		  { { 0.f, 1.f, 0.f }, { 0.f, 0.f, 1.f }, { 0.f, 1.f } },
-		  { { 1.f, 1.f, 0.f }, { 0.f, 0.f, 1.f }, { 1.f, 1.f } } },
-
-		  //gpu mesh
-		  renderer.CreateMesh(quad)
-	};
-
-	meshes.push_back(std::make_unique<Mesh>(quad));
-
-	//parts
-	Part part = {
-		meshes.back().get(),
-		nullptr,
-		m4::translateMatrix({0.f, 0.f, -1.f})
-	};
-
-	//simple triangle
-	Mesh triangle = {
-		//vertices
-		{ { { -0.5f, -0.5f, 0.f }, { 0.f, 0.f, 1.f }, { 0.f, 0.f } },
-		  { { 0.5f, -0.5f, 0.f }, { 0.f, 0.f, 1.f }, { 1.f, 0.f } },
-		  { { 0.f, 0.5f, 0.f }, { 0.f, 0.f, 1.f }, { 0.f, 1.f } } },
-
-		  //gpu mesh
-		  renderer.CreateMesh(triangle)
-	};
-
-	meshes.push_back(std::make_unique<Mesh>(triangle));
-
-	Part part2 = {
-		meshes.back().get(),
-		nullptr,
-		mat4::identity
-	};
+	Part part = makePart(makeMesh("fantasy_game_inn.obj"),
+						 makeMaterial("fantasy_game_inn_diffuse.png"),
+						 vec3::zero, vec3::zero, { 1.f, 1.f, 1.f });
 
 	//objects
-	staticObjects.push_back({ { part, part2 } });
-	staticObjects.push_back({ { filePart } });
+	staticObjects.push_back({ { part } });
 	renderer.SetStaticObjects(staticObjects);
 }
 
@@ -135,6 +71,44 @@ void Scene::UpdateAndRender()
 	mat4 view = m4::translateMatrix(-camPos) * m4::rotateYMatrix(-yaw) * m4::rotateXMatrix(pitch);
 
 	renderer.RenderAll(perspective, view, dynamicObjects, lights);
+}
+
+Mesh* Scene::makeMesh(const char* filename)
+{
+	std::vector<Vertex> vertices;
+	loadObj(filename, vertices);
+
+	Mesh mesh = {
+		vertices,
+		renderer.CreateMesh(mesh)
+	};
+
+	meshes.push_back(std::make_unique<Mesh>(mesh));
+
+	return meshes.back().get();
+}
+
+Material* Scene::makeMaterial(const char* filename)
+{
+	Texture tex;
+	tex.data = loadTexture(filename, tex.width, tex.height, tex.bpp, true);
+	tex.gpu = renderer.CreateTexture(tex);
+
+	textures.push_back(std::make_unique<Texture>(tex));
+
+	Material* mat = new Material();
+	mat->diffuseTexture = textures.back().get();
+
+	return mat;
+}
+
+Part Scene::makePart(Mesh* mesh, Material* mat, const vec3& t, const vec3& r, const vec3& s) const
+{
+	return { mesh, mat, m4::translateMatrix(t) *
+						m4::rotateZMatrix(r.x) *
+						m4::rotateYMatrix(r.y) *
+						m4::rotateXMatrix(r.x) *
+						m4::scaleMatrix(s) };
 }
 
 void Scene::loadObj(const char* mesh, std::vector<Vertex>& vertices) const
