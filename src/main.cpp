@@ -80,6 +80,7 @@ int main(int argc, char* argv[])
 
     while (glfwWindowShouldClose(window) == false)
     {
+        glfwSwapInterval(0);
         glfwPollEvents();
 
         ImGui_ImplOpenGL3_NewFrame();
