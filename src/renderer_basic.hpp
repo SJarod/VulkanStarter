@@ -39,6 +39,8 @@ public:
     // Fonction qui rends à la fois les objets statiques et les objets dynamiques
     void RenderAll(const mat4& proj, const mat4& view, const std::vector<Object>& dynamicObjects, const std::vector<Light>& lights) override;
 
+    void loadShader(const char* shader);
+
     //create gpu version of mesh, material and texture (VAO, VBO, EBO, ...)
     GPUMesh* CreateMesh(const Mesh& mesh) override;
     GPUMaterial* CreateMaterial(const Material& material) override;

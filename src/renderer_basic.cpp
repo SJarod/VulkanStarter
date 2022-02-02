@@ -10,67 +10,7 @@
 
 RendererBasic::RendererBasic(const char* shader)
 {
-	std::string filename = shader;
-	filename = "resources/shaders/" + filename;
-
-	//vertex shader
-	std::ifstream vsStream(filename + ".vs");
-	std::ifstream fsStream(filename + ".fs");
-
-	if (!vsStream.is_open() || !fsStream.is_open())
-	{
-		std::cout << "could not open shader files : " << filename << std::endl;
-		return;
-	}
-
-	std::string vs((std::istreambuf_iterator<char>(vsStream)), std::istreambuf_iterator<char>());
-	std::string fs((std::istreambuf_iterator<char>(fsStream)), std::istreambuf_iterator<char>());
-
-	const char* vertexShaderSource = vs.c_str();
-	const char* fragmentShaderSource = fs.c_str();
-
-	//shaders
-	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-	glCompileShader(vertexShader);
-
-	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-	glCompileShader(fragmentShader);
-
-	int  success[2];
-	char infoLog[2][512];
-
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success[0]);
-
-	if (!success[0])
-	{
-		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog[0]);
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED : " << filename << ".vs\n" << infoLog[0] << std::endl;
-	}
-
-	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success[1]);
-
-	if (!success[1])
-	{
-		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog[1]);
-		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED : " << filename << ".fs\n" << infoLog[1] << std::endl;
-	}
-
-	if (success[0] && success[1])
-	{
-		std::cout << "successfully loaded shader files : " << filename << std::endl;
-		program = glCreateProgram();
-		glAttachShader(program, vertexShader);
-		glAttachShader(program, fragmentShader);
-		glLinkProgram(program);
-	}
-
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
-
-	vsStream.close();
-	fsStream.close();
+	loadShader(shader);
 }
 
 RendererBasic::~RendererBasic()
@@ -170,9 +110,75 @@ GPUTexture* RendererBasic::CreateTexture(const Texture& texture)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	if (texture.data)
 	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture.width, texture.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture.data);
+		GLint bpp = texture.bpp == 1 ? GL_RED : texture.bpp == 2 ? GL_RG : texture.bpp == 3 ? GL_RGB : GL_RGBA;
+		glTexImage2D(GL_TEXTURE_2D, 0, bpp, texture.width, texture.height, 0, bpp, GL_UNSIGNED_BYTE, texture.data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 
 	return gpu;
+}
+
+void RendererBasic::loadShader(const char* shader)
+{
+	std::string filename = shader;
+	filename = "resources/shaders/" + filename;
+
+	//vertex shader
+	std::ifstream vsStream(filename + ".vs");
+	std::ifstream fsStream(filename + ".fs");
+
+	if (!vsStream.is_open() || !fsStream.is_open())
+	{
+		std::cout << "could not open shader files : " << filename << std::endl;
+		return;
+	}
+
+	std::string vs((std::istreambuf_iterator<char>(vsStream)), std::istreambuf_iterator<char>());
+	std::string fs((std::istreambuf_iterator<char>(fsStream)), std::istreambuf_iterator<char>());
+
+	const char* vertexShaderSource = vs.c_str();
+	const char* fragmentShaderSource = fs.c_str();
+
+	//shaders
+	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+	glCompileShader(vertexShader);
+
+	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+	glCompileShader(fragmentShader);
+
+	int  success[2];
+	char infoLog[2][512];
+
+	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success[0]);
+
+	if (!success[0])
+	{
+		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog[0]);
+		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED : " << filename << ".vs\n" << infoLog[0] << std::endl;
+	}
+
+	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success[1]);
+
+	if (!success[1])
+	{
+		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog[1]);
+		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED : " << filename << ".fs\n" << infoLog[1] << std::endl;
+	}
+
+	if (success[0] && success[1])
+	{
+		std::cout << "successfully loaded shader files : " << filename << std::endl;
+		program = glCreateProgram();
+		glAttachShader(program, vertexShader);
+		glAttachShader(program, fragmentShader);
+		glLinkProgram(program);
+	}
+
+	glDeleteShader(vertexShader);
+	glDeleteShader(fragmentShader);
+
+	vsStream.close();
+	fsStream.close();
 }
