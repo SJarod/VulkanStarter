@@ -16,6 +16,7 @@ public:
     virtual void RenderAll(const mat4& proj, const mat4& view, const std::vector<Object>& dynamicObjects, const std::vector<Light>& lights) = 0;
 
     virtual GPUMesh* CreateMesh(const Mesh& mesh) = 0;
+    virtual void CreateMeshes(std::vector<std::unique_ptr<Mesh>>& meshes) = 0;
     virtual GPUMaterial* CreateMaterial(const Material& material) = 0;
     virtual GPUTexture* CreateTexture(const Texture& texture) = 0;
 };

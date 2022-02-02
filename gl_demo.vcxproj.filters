@@ -18,6 +18,8 @@
     <ClInclude Include="src\renderer_basic.hpp" />
     <ClInclude Include="src\memleaks.hpp" />
     <ClInclude Include="src\stb_image.h" />
+    <ClInclude Include="src\renderer_onevao.hpp" />
+    <ClInclude Include="src\demo_renderer_onevao.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\demo_test.cpp" />
@@ -53,6 +55,8 @@
     <ClCompile Include="src\types.cpp" />
     <ClCompile Include="src\memleaks.cpp" />
     <ClCompile Include="src\stb_image.c" />
+    <ClCompile Include="src\renderer_onevao.cpp" />
+    <ClCompile Include="src\demo_renderer_onevao.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="externals">

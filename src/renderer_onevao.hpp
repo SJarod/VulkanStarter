@@ -2,37 +2,32 @@
 
 #include "renderer_interface.hpp"
 
-struct GPUMeshBasic : GPUMesh
+struct GPUMeshOneVao : GPUMesh
 {
-    GLuint VBO;
-    GLuint VAO;
-
-    ~GPUMeshBasic()
-    {
-        glDeleteBuffers(1, &VBO);
-        glDeleteVertexArrays(1, &VAO);
-    }
+    int startIndex;
+    int size;
 };
 
-struct GPUTextureBasic : GPUTexture
+struct GPUTextureOneVao : GPUTexture
 {
     GLuint data;
 };
 
-struct GPUMaterialBasic : GPUMaterial
+struct GPUMaterialOneVao : GPUMaterial
 {
 };
 
-class RendererBasic : public RendererInterface
+class RendererOneVao : public RendererInterface
 {
 private:
-    GLuint program = 0;
+    GLuint program;
+    GLuint VBO, VAO;
 
     std::vector<Object> staticObjects;
 
 public:
-    RendererBasic(const char* shader);
-    ~RendererBasic() override;
+    RendererOneVao(const char* shader);
+    ~RendererOneVao() override;
 
     // Les objets statiques ne bougent pas est sont passé une seul fois au renderer
     void SetStaticObjects(const std::vector<Object>& staticObjects) override;
@@ -41,6 +36,7 @@ public:
     void RenderAll(const mat4& proj, const mat4& view, const std::vector<Object>& dynamicObjects, const std::vector<Light>& lights) override;
 
     void loadShader(const char* shader);
+    void createVAO();
 
     //create gpu version of mesh, material and texture (VAO, VBO, EBO, ...)
     GPUMesh* CreateMesh(const Mesh& mesh) override;

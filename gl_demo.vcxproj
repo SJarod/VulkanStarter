@@ -88,12 +88,14 @@
     <ClInclude Include="externals\src\imstb_truetype.h" />
     <ClInclude Include="src\demo.hpp" />
     <ClInclude Include="src\demo_renderer_basic.hpp" />
+    <ClInclude Include="src\demo_renderer_onevao.hpp" />
     <ClInclude Include="src\demo_test.hpp" />
     <ClInclude Include="src\maths.hpp" />
     <ClInclude Include="src\memleaks.hpp" />
     <ClInclude Include="src\object.hpp" />
     <ClInclude Include="src\renderer_basic.hpp" />
     <ClInclude Include="src\renderer_interface.hpp" />
+    <ClInclude Include="src\renderer_onevao.hpp" />
     <ClInclude Include="src\scene.hpp" />
     <ClInclude Include="src\stb_image.h" />
     <ClInclude Include="src\types.hpp" />
@@ -109,10 +111,12 @@
     <ClCompile Include="externals\src\imgui_impl_opengl3.cpp" />
     <ClCompile Include="externals\src\tiny_obj_loader.cpp" />
     <ClCompile Include="src\demo_renderer_basic.cpp" />
+    <ClCompile Include="src\demo_renderer_onevao.cpp" />
     <ClCompile Include="src\demo_test.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\memleaks.cpp" />
     <ClCompile Include="src\renderer_basic.cpp" />
+    <ClCompile Include="src\renderer_onevao.cpp" />
     <ClCompile Include="src\scene.cpp" />
     <ClCompile Include="src\stb_image.c" />
     <ClCompile Include="src\types.cpp" />

@@ -12,12 +12,19 @@
 Scene::Scene(RendererInterface& renderer)
 	: renderer(renderer)
 {
-	Part part = makePart(makeMesh("fantasy_game_inn.obj"),
-						 makeMaterial("fantasy_game_inn_diffuse.png"),
-						 vec3::zero, vec3::zero, { 1.f, 1.f, 1.f });
+	Part tavern = makePart(makeMesh("fantasy_game_inn.obj"),
+						   makeMaterial("fantasy_game_inn_diffuse.png"),
+						   vec3::zero, vec3::zero, { 1.f, 1.f, 1.f });
+
+	Part teapot = makePart(makeMesh("teapot.obj"),
+						   nullptr,
+						   { 0.f, 2.f, 0.f }, vec3::zero, { 1.f, 1.f, 1.f });
 
 	//objects
-	staticObjects.push_back({ { part } });
+	staticObjects.push_back({ { tavern } });
+	staticObjects.push_back({ { teapot } });
+
+	renderer.CreateMeshes(meshes);
 	renderer.SetStaticObjects(staticObjects);
 }
 
@@ -78,10 +85,8 @@ Mesh* Scene::makeMesh(const char* filename)
 	std::vector<Vertex> vertices;
 	loadObj(filename, vertices);
 
-	Mesh mesh = {
-		vertices,
-		renderer.CreateMesh(mesh)
-	};
+	Mesh mesh;
+	mesh.vertices = vertices;
 
 	meshes.push_back(std::make_unique<Mesh>(mesh));
 

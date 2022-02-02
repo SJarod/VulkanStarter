@@ -12,6 +12,7 @@
 #include "demo_test.hpp"
 // NOTES: Placez vos includes ici et modifiez demoList dans le main(), et n'oubliez pas de modifier le Makefile
 #include "demo_renderer_basic.hpp"
+#include "demo_renderer_onevao.hpp"
 
 #include "memleaks.hpp"
 
@@ -71,6 +72,7 @@ int main(int argc, char* argv[])
     {
         new DemoTest(),
         new DemoRendererBasic(),
+        new DemoRendererOneVao(),
     };
 
     int demoIndex = 1; // Start index
