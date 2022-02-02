@@ -96,13 +96,16 @@ void RendererBasic::RenderAll(const mat4& proj, const mat4& view, const std::vec
 	{
 		for (const Part& p : obj.parts)
 		{
-			glBindVertexArray((static_cast<GPUMeshBasic*>(p.mesh->gpu))->VAO);
-			glUniformMatrix4fv(glGetUniformLocation(program, "uModel"), 1, GL_FALSE, p.localMatrix.e);
 			if (p.material)
 				glBindTexture(GL_TEXTURE_2D, (static_cast<GPUTextureBasic*>(p.material->diffuseTexture->gpu))->data);
+
+			glUniformMatrix4fv(glGetUniformLocation(program, "uModel"), 1, GL_FALSE, p.localMatrix.e);
+
+			glBindVertexArray((static_cast<GPUMeshBasic*>(p.mesh->gpu))->VAO);
 			glDrawArrays(GL_TRIANGLES, 0, p.mesh->vertices.size());
-			glBindTexture(GL_TEXTURE_2D, 0);
 			glBindVertexArray(0);
+
+			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 	}
 
@@ -110,13 +113,16 @@ void RendererBasic::RenderAll(const mat4& proj, const mat4& view, const std::vec
 	{
 		for (const Part& p : obj.parts)
 		{
-			glBindVertexArray((static_cast<GPUMeshBasic*>(p.mesh->gpu))->VAO);
-			glUniformMatrix4fv(glGetUniformLocation(program, "uModel"), 1, GL_FALSE, p.localMatrix.e);
 			if (p.material)
 				glBindTexture(GL_TEXTURE_2D, (static_cast<GPUTextureBasic*>(p.material->diffuseTexture->gpu))->data);
+
+			glUniformMatrix4fv(glGetUniformLocation(program, "uModel"), 1, GL_FALSE, p.localMatrix.e);
+
+			glBindVertexArray((static_cast<GPUMeshBasic*>(p.mesh->gpu))->VAO);
 			glDrawArrays(GL_TRIANGLES, 0, p.mesh->vertices.size());
-			glBindTexture(GL_TEXTURE_2D, 0);
 			glBindVertexArray(0);
+
+			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 	}
 
