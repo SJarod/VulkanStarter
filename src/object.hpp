@@ -22,7 +22,6 @@ struct Mesh
 {
     //cpu
     std::vector<Vertex> vertices;
-    std::vector<uint> indices;
     //gpu
     GPUMesh* gpu;
 };

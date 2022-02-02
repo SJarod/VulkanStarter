@@ -13,12 +13,10 @@ Scene::Scene(RendererInterface& renderer)
 	: renderer(renderer)
 {
 	std::vector<Vertex> fileVertices;
-	std::vector<uint> fileIndices;
-	loadObj("fantasy_game_inn.obj", fileVertices, fileIndices);
+	loadObj("fantasy_game_inn.obj", fileVertices);
 
 	Mesh fileMesh = {
 		fileVertices,
-		fileIndices,
 		renderer.CreateMesh(fileMesh)
 	};
 
@@ -45,10 +43,9 @@ Scene::Scene(RendererInterface& renderer)
 		{ { { 0.f, 0.f, 0.f }, { 0.f, 0.f, 1.f }, { 0.f, 0.f } },
 		  { { 1.f, 0.f, 0.f }, { 0.f, 0.f, 1.f }, { 1.f, 0.f } },
 		  { { 0.f, 1.f, 0.f }, { 0.f, 0.f, 1.f }, { 0.f, 1.f } },
+		  { { 1.f, 0.f, 0.f }, { 0.f, 0.f, 1.f }, { 1.f, 0.f } },
+		  { { 0.f, 1.f, 0.f }, { 0.f, 0.f, 1.f }, { 0.f, 1.f } },
 		  { { 1.f, 1.f, 0.f }, { 0.f, 0.f, 1.f }, { 1.f, 1.f } } },
-
-		  //indices
-		  { 0, 1, 2, 1, 2, 3 },
 
 		  //gpu mesh
 		  renderer.CreateMesh(quad)
@@ -69,9 +66,6 @@ Scene::Scene(RendererInterface& renderer)
 		{ { { -0.5f, -0.5f, 0.f }, { 0.f, 0.f, 1.f }, { 0.f, 0.f } },
 		  { { 0.5f, -0.5f, 0.f }, { 0.f, 0.f, 1.f }, { 1.f, 0.f } },
 		  { { 0.f, 0.5f, 0.f }, { 0.f, 0.f, 1.f }, { 0.f, 1.f } } },
-
-		  //indices
-		  { 0, 1, 2 },
 
 		  //gpu mesh
 		  renderer.CreateMesh(triangle)
@@ -143,7 +137,7 @@ void Scene::UpdateAndRender()
 	renderer.RenderAll(perspective, view, dynamicObjects, lights);
 }
 
-void Scene::loadObj(const char* mesh, std::vector<Vertex>& vertices, std::vector<uint>& indices) const
+void Scene::loadObj(const char* mesh, std::vector<Vertex>& vertices) const
 {
 	std::string Warn;
 	std::string Err;
@@ -158,24 +152,22 @@ void Scene::loadObj(const char* mesh, std::vector<Vertex>& vertices, std::vector
 	else
 		std::cout << "could not load object : " << filename << std::endl;
 
-	for (int i = 0; i < Attrib.vertices.size() / 3; ++i)
-	{
-		vec3 v = { Attrib.vertices[i * 3 + 0], Attrib.vertices[i * 3 + 1], Attrib.vertices[i * 3 + 2] };
-		vec3 n = vec3::zero;
-		if (!Attrib.normals.empty() && i < Attrib.normals.size() / 3)
-			n = { Attrib.normals[i], Attrib.normals[i + 1], Attrib.normals[i + 2] };
-		vec2 u = vec2::zero;
-		if (!Attrib.texcoords.empty() && i < Attrib.texcoords.size() / 3)
-			u = { Attrib.texcoords[i], Attrib.texcoords[i + 1] };
-
-		vertices.push_back({ v, n, u });
-	}
-
 	for (tinyobj::shape_t& sh : Shapes)
 	{
-		for (tinyobj::index_t& ind : sh.mesh.indices)
+		for (int i = 0; i < sh.mesh.indices.size(); ++i)
 		{
-			indices.push_back(ind.vertex_index);
+			int v = sh.mesh.indices[i].vertex_index;
+			int n = sh.mesh.indices[i].normal_index;
+			int t = sh.mesh.indices[i].texcoord_index;
+
+			Vertex vx;
+			vx.position = { Attrib.vertices[v * 3 + 0], Attrib.vertices[v * 3 + 1], Attrib.vertices[v * 3 + 2] };
+			if (!Attrib.normals.empty())
+				vx.normal = { Attrib.normals[n * 3 + 0], Attrib.normals[n * 3 + 1], Attrib.normals[n * 3 + 2] };
+			if (!Attrib.texcoords.empty())
+				vx.uv0 = { Attrib.texcoords[t * 2 + 0], Attrib.texcoords[t * 2 + 1] };
+
+			vertices.push_back(vx);
 		}
 	}
 }
