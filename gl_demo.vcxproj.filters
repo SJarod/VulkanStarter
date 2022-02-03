@@ -20,6 +20,8 @@
     <ClInclude Include="src\stb_image.h" />
     <ClInclude Include="src\renderer_onevao.hpp" />
     <ClInclude Include="src\demo_renderer_onevao.hpp" />
+    <ClInclude Include="src\demo_renderer_multidraw.hpp" />
+    <ClInclude Include="src\renderer_multidraw.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\demo_test.cpp" />
@@ -57,14 +59,12 @@
     <ClCompile Include="src\stb_image.c" />
     <ClCompile Include="src\renderer_onevao.cpp" />
     <ClCompile Include="src\demo_renderer_onevao.cpp" />
+    <ClCompile Include="src\demo_renderer_multidraw.cpp" />
+    <ClCompile Include="src\renderer_multidraw.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="externals">
       <UniqueIdentifier>{14db1f0a-2758-4097-a557-ed4892697b8c}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="resources\shaders\basic.vs" />
-    <None Include="resources\shaders\basic.fs" />
   </ItemGroup>
 </Project>

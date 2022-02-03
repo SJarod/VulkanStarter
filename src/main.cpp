@@ -13,6 +13,7 @@
 // NOTES: Placez vos includes ici et modifiez demoList dans le main(), et n'oubliez pas de modifier le Makefile
 #include "demo_renderer_basic.hpp"
 #include "demo_renderer_onevao.hpp"
+#include "demo_renderer_multidraw.hpp"
 
 #include "memleaks.hpp"
 
@@ -37,7 +38,6 @@ int main(int argc, char* argv[])
     // Target OpenGL 4.5 API in Compatibility mode
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
-
     GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "GLFW test", nullptr, nullptr);
     if (window == nullptr)
     {
@@ -73,9 +73,10 @@ int main(int argc, char* argv[])
         new DemoTest(),
         new DemoRendererBasic(),
         new DemoRendererOneVao(),
+        new DemoRendererMultiDraw(),
     };
 
-    int demoIndex = 1; // Start index
+    int demoIndex = 3; // Start index
     int demoCount = IM_ARRAYSIZE(demoList);
 
     while (glfwWindowShouldClose(window) == false)

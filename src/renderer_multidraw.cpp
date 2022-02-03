@@ -3,33 +3,43 @@
 #include <fstream>
 #include <iostream>
 
-#include "renderer_onevao.hpp"
+#include "renderer_multidraw.hpp"
 #include "memleaks.hpp"
 
 #include "maths.hpp"
 
-RendererOneVao::RendererOneVao(const char* shader)
+RendererMultiDraw::RendererMultiDraw(const char* shader)
 {
 	loadShader(shader);
 }
 
-RendererOneVao::~RendererOneVao()
+RendererMultiDraw::~RendererMultiDraw()
 {
 	glDeleteBuffers(1, &VBO);
 	glDeleteVertexArrays(1, &VAO);
 }
 
-void RendererOneVao::SetStaticObjects(const std::vector<Object>& staticObjects)
+void RendererMultiDraw::SetStaticObjects(const std::vector<Object>& staticObjects)
 {
 	this->staticObjects = staticObjects;
 }
 
-void RendererOneVao::RenderAll(const mat4& proj, const mat4& view, const std::vector<Object>& dynamicObjects, const std::vector<Light>& lights)
+void RendererMultiDraw::RenderAll(const mat4& proj, const mat4& view, const std::vector<Object>& dynamicObjects, const std::vector<Light>& lights)
 {
 	glEnable(GL_DEPTH_TEST);
 
 	glClearColor(0.f, 0.f, 0.f, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glBindBuffer(GL_ARRAY_BUFFER, matricesVBO);
+	int i = 0;
+	for (Object& obj : staticObjects)
+	{
+		for (Part& p : obj.parts)
+		{
+			glBufferSubData(GL_ARRAY_BUFFER, i++ * sizeof(mat4), sizeof(mat4), p.localMatrix.e);
+		}
+	}
 
 	glUseProgram(program);
 	glUniformMatrix4fv(glGetUniformLocation(program, "uVP"), 1, GL_FALSE, (view * proj).e);
@@ -42,7 +52,7 @@ void RendererOneVao::RenderAll(const mat4& proj, const mat4& view, const std::ve
 		{
 			if (p.material)
 			{
-				glBindTexture(GL_TEXTURE_2D, (static_cast<GPUTextureOneVao*>(p.material->diffuseTexture->gpu))->data);
+				glBindTexture(GL_TEXTURE_2D, (static_cast<GPUTextureMultiDraw*>(p.material->diffuseTexture->gpu))->data);
 				glUniform1i(glGetUniformLocation(program, "uHasTexture"), true);
 			}
 			else
@@ -52,7 +62,7 @@ void RendererOneVao::RenderAll(const mat4& proj, const mat4& view, const std::ve
 
 			glUniformMatrix4fv(glGetUniformLocation(program, "uModel"), 1, GL_FALSE, p.localMatrix.e);
 
-			GPUMeshOneVao gpuMesh = *static_cast<GPUMeshOneVao*>(p.mesh->gpu);
+			GPUMeshMultiDraw gpuMesh = *static_cast<GPUMeshMultiDraw*>(p.mesh->gpu);
 			glDrawArrays(GL_TRIANGLES, gpuMesh.startIndex, gpuMesh.size);
 
 			glBindTexture(GL_TEXTURE_2D, 0);
@@ -65,7 +75,7 @@ void RendererOneVao::RenderAll(const mat4& proj, const mat4& view, const std::ve
 		{
 			if (p.material)
 			{
-				glBindTexture(GL_TEXTURE_2D, (static_cast<GPUTextureOneVao*>(p.material->diffuseTexture->gpu))->data);
+				glBindTexture(GL_TEXTURE_2D, (static_cast<GPUTextureMultiDraw*>(p.material->diffuseTexture->gpu))->data);
 				glUniform1i(glGetUniformLocation(program, "uHasTexture"), true);
 			}
 			else
@@ -75,7 +85,7 @@ void RendererOneVao::RenderAll(const mat4& proj, const mat4& view, const std::ve
 
 			glUniformMatrix4fv(glGetUniformLocation(program, "uModel"), 1, GL_FALSE, p.localMatrix.e);
 
-			GPUMeshOneVao gpuMesh = *static_cast<GPUMeshOneVao*>(p.mesh->gpu);
+			GPUMeshMultiDraw gpuMesh = *static_cast<GPUMeshMultiDraw*>(p.mesh->gpu);
 			glDrawArrays(GL_TRIANGLES, gpuMesh.startIndex, gpuMesh.size);
 
 			glBindTexture(GL_TEXTURE_2D, 0);
@@ -87,19 +97,19 @@ void RendererOneVao::RenderAll(const mat4& proj, const mat4& view, const std::ve
 	glDisable(GL_DEPTH_TEST);
 }
 
-GPUMesh* RendererOneVao::CreateMesh(const Mesh& mesh)
+GPUMesh* RendererMultiDraw::CreateMesh(const Mesh& mesh)
 {
-	return new GPUMeshOneVao();
+	return new GPUMeshMultiDraw();
 }
 
-GPUMaterial* RendererOneVao::CreateMaterial(const Material& material)
+GPUMaterial* RendererMultiDraw::CreateMaterial(const Material& material)
 {
 	return nullptr;
 }
 
-GPUTexture* RendererOneVao::CreateTexture(const Texture& texture)
+GPUTexture* RendererMultiDraw::CreateTexture(const Texture& texture)
 {
-	GPUTextureOneVao* gpu = new GPUTextureOneVao();
+	GPUTextureMultiDraw* gpu = new GPUTextureMultiDraw();
 
 	glGenTextures(1, &gpu->data);
 
@@ -118,7 +128,7 @@ GPUTexture* RendererOneVao::CreateTexture(const Texture& texture)
 	return gpu;
 }
 
-void RendererOneVao::loadShader(const char* shader)
+void RendererMultiDraw::loadShader(const char* shader)
 {
 	std::string filename = shader;
 	filename = "resources/shaders/" + filename;
@@ -183,21 +193,35 @@ void RendererOneVao::loadShader(const char* shader)
 	fsStream.close();
 }
 
-void RendererOneVao::createVAO()
+void RendererMultiDraw::createVAO()
 {
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)sizeof(vec3));
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(2 * sizeof(vec3)));
+
+	glBindBuffer(GL_ARRAY_BUFFER, matricesVBO);
+	glEnableVertexAttribArray(3);
+	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(vec4), (void*)0);
+	glEnableVertexAttribArray(4);
+	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(vec4), (void*)sizeof(vec4));
+	glEnableVertexAttribArray(5);
+	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(vec4), (void*)(2 * sizeof(vec4)));
+	glEnableVertexAttribArray(6);
+	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(vec4), (void*)(3 * sizeof(vec4)));
+
 	glBindVertexArray(0);
 }
 
-void RendererOneVao::CreateMeshes(std::vector<std::unique_ptr<Mesh>>& meshes)
+void RendererMultiDraw::CreateMeshes(std::vector<std::unique_ptr<Mesh>>& meshes)
 {
+	//vertices
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
@@ -208,12 +232,17 @@ void RendererOneVao::CreateMeshes(std::vector<std::unique_ptr<Mesh>>& meshes)
 		vertices.insert(vertices.end(), m->vertices.begin(), m->vertices.end());
 
 		m.get()->gpu = CreateMesh(*m.get());
-		(static_cast<GPUMeshOneVao*>(m.get()->gpu))->startIndex = offsetIndex;
-		(static_cast<GPUMeshOneVao*>(m.get()->gpu))->size = m->vertices.size();
+		(static_cast<GPUMeshMultiDraw*>(m.get()->gpu))->startIndex = offsetIndex;
+		(static_cast<GPUMeshMultiDraw*>(m.get()->gpu))->size = m->vertices.size();
 		offsetIndex += m->vertices.size();
 	}
 	
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
+
+	//model matrices
+	glGenBuffers(1, &matricesVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, matricesVBO);
+	glBufferData(GL_ARRAY_BUFFER, meshes.size() * sizeof(mat4), NULL, GL_STATIC_DRAW);
 
 	createVAO();
 }
