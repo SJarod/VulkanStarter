@@ -24,10 +24,19 @@ inline float3 operator*(float a, float3 b)
     return { a * b.x, a * b.y, a* b.z };
 }
 
-inline mat4 operator*(const mat4& m, const mat4& m2)
+inline mat4 operator+(const mat4& m, const mat4& m2)
 {
 	mat4 temp = {};
 
+	for (int i = 0; i < 16; ++i)
+		temp.e[i] = m.e[i] + m2.e[i];
+
+	return temp;
+}
+
+inline mat4 operator*(const mat4& m, const mat4& m2)
+{
+	mat4 temp = {};
 	
 	for (int i = 0; i < 4; ++i)
 	{

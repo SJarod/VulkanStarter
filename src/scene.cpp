@@ -21,8 +21,17 @@ Scene::Scene(RendererInterface& renderer)
 						   { 0.f, 2.f, 0.f }, vec3::zero, { 1.f, 1.f, 1.f });
 
 	//objects
-	staticObjects.push_back({ { tavern } });
+	for (int i = 0; i < 999; ++i)
+	{
+		staticObjects.push_back({ { tavern } });
+		for (Part& p : staticObjects[i].parts)
+		{
+			p.localMatrix = m4::translateMatrix({ (float)i, 0.f, 0.f }) *
+							m4::rotateXMatrix((float)i);
+		}
+	}
 	staticObjects.push_back({ { teapot } });
+	dynamicObjects.push_back({ { tavern } });
 
 	renderer.CreateMeshes(meshes);
 	renderer.SetStaticObjects(staticObjects);
@@ -43,8 +52,8 @@ Scene::~Scene()
 	{
 		for (Part& p : obj.parts)
 		{
-			if (p.material)
-				delete p.material;
+			//if (p.material)
+			//	delete p.material;
 		}
 	}
 
@@ -52,8 +61,8 @@ Scene::~Scene()
 	{
 		for (Part& p : obj.parts)
 		{
-			if (p.material)
-				delete p.material;
+			//if (p.material)
+			//	delete p.material;
 		}
 	}
 
@@ -76,6 +85,15 @@ void Scene::UpdateAndRender()
 	static float yaw = 0.f;
 	ImGui::DragFloat("yaw", &yaw, 0.1f);
 	mat4 view = m4::translateMatrix(-camPos) * m4::rotateYMatrix(-yaw) * m4::rotateXMatrix(pitch);
+
+	for (Object& obj : dynamicObjects)
+	{
+		for (Part& p : obj.parts)
+		{
+			p.localMatrix = m4::translateMatrix({ sinf(ImGui::GetTime()) * 5.f, -1.f, 0.f }) *
+							m4::rotateXMatrix(cosf(ImGui::GetTime()) * 180.f);
+		}
+	}
 
 	renderer.RenderAll(perspective, view, dynamicObjects, lights);
 }
@@ -110,7 +128,7 @@ Material* Scene::makeMaterial(const char* filename)
 Part Scene::makePart(Mesh* mesh, Material* mat, const vec3& t, const vec3& r, const vec3& s) const
 {
 	return { mesh, mat, m4::translateMatrix(t) *
-						m4::rotateZMatrix(r.x) *
+						m4::rotateZMatrix(r.z) *
 						m4::rotateYMatrix(r.y) *
 						m4::rotateXMatrix(r.x) *
 						m4::scaleMatrix(s) };
