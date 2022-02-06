@@ -5,7 +5,6 @@
 struct GPUMeshMultiDraw : GPUMesh
 {
     int startIndex;
-    int size;
 };
 
 struct GPUTextureMultiDraw : GPUTexture

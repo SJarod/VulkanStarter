@@ -16,9 +16,9 @@ Scene::Scene(RendererInterface& renderer)
 						   makeMaterial("fantasy_game_inn_diffuse.png"),
 						   vec3::zero, vec3::zero, { 1.f, 1.f, 1.f });
 
-	Part teapot = makePart(makeMesh("teapot.obj"),
-						   nullptr,
-						   { 0.f, 2.f, 0.f }, vec3::zero, { 1.f, 1.f, 1.f });
+	//Part teapot = makePart(makeMesh("teapot.obj"),
+	//					   nullptr,
+	//					   { 0.f, 2.f, 0.f }, vec3::zero, { 1.f, 1.f, 1.f });
 
 	//objects
 	for (int i = 0; i < 999; ++i)
@@ -30,7 +30,7 @@ Scene::Scene(RendererInterface& renderer)
 							m4::rotateXMatrix((float)i);
 		}
 	}
-	staticObjects.push_back({ { teapot } });
+	//staticObjects.push_back({ { teapot } });
 	dynamicObjects.push_back({ { tavern } });
 
 	renderer.CreateMeshes(meshes);

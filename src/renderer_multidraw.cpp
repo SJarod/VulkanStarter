@@ -63,7 +63,7 @@ void RendererMultiDraw::RenderAll(const mat4& proj, const mat4& view, const std:
 			glUniformMatrix4fv(glGetUniformLocation(program, "uModel"), 1, GL_FALSE, p.localMatrix.e);
 
 			GPUMeshMultiDraw gpuMesh = *static_cast<GPUMeshMultiDraw*>(p.mesh->gpu);
-			glDrawArrays(GL_TRIANGLES, gpuMesh.startIndex, gpuMesh.size);
+			glDrawArrays(GL_TRIANGLES, gpuMesh.startIndex, p.mesh->vertices.size());
 
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
@@ -86,7 +86,7 @@ void RendererMultiDraw::RenderAll(const mat4& proj, const mat4& view, const std:
 			glUniformMatrix4fv(glGetUniformLocation(program, "uModel"), 1, GL_FALSE, p.localMatrix.e);
 
 			GPUMeshMultiDraw gpuMesh = *static_cast<GPUMeshMultiDraw*>(p.mesh->gpu);
-			glDrawArrays(GL_TRIANGLES, gpuMesh.startIndex, gpuMesh.size);
+			glDrawArrays(GL_TRIANGLES, gpuMesh.startIndex, p.mesh->vertices.size());
 
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
@@ -233,7 +233,6 @@ void RendererMultiDraw::CreateMeshes(std::vector<std::unique_ptr<Mesh>>& meshes)
 
 		m.get()->gpu = CreateMesh(*m.get());
 		(static_cast<GPUMeshMultiDraw*>(m.get()->gpu))->startIndex = offsetIndex;
-		(static_cast<GPUMeshMultiDraw*>(m.get()->gpu))->size = m->vertices.size();
 		offsetIndex += m->vertices.size();
 	}
 	

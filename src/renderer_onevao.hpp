@@ -5,7 +5,6 @@
 struct GPUMeshOneVao : GPUMesh
 {
     int startIndex;
-    int size;
 };
 
 struct GPUTextureOneVao : GPUTexture

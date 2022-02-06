@@ -6,10 +6,10 @@
 imgui.ini
 
 # resources
-[Aa]ssets
-*.obj
-*.png
-*.jpg
+#[Aa]ssets
+#*.obj
+#*.png
+#*.jpg
 
 # Build results
 [Dd]ebug
