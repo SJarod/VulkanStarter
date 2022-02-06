@@ -20,6 +20,8 @@
     <ClInclude Include="src\stb_image.h" />
     <ClInclude Include="src\renderer_onevao.hpp" />
     <ClInclude Include="src\demo_renderer_onevao.hpp" />
+    <ClInclude Include="src\demo_renderer_modelvao.hpp" />
+    <ClInclude Include="src\renderer_modelvao.hpp" />
     <ClInclude Include="src\demo_renderer_multidraw.hpp" />
     <ClInclude Include="src\renderer_multidraw.hpp" />
   </ItemGroup>
@@ -59,6 +61,8 @@
     <ClCompile Include="src\stb_image.c" />
     <ClCompile Include="src\renderer_onevao.cpp" />
     <ClCompile Include="src\demo_renderer_onevao.cpp" />
+    <ClCompile Include="src\demo_renderer_modelvao.cpp" />
+    <ClCompile Include="src\renderer_modelvao.cpp" />
     <ClCompile Include="src\demo_renderer_multidraw.cpp" />
     <ClCompile Include="src\renderer_multidraw.cpp" />
   </ItemGroup>

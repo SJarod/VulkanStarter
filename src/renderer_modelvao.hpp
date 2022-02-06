@@ -2,31 +2,32 @@
 
 #include "renderer_interface.hpp"
 
-struct GPUMeshOneVao : GPUMesh
+struct GPUMeshMultiDraw : GPUMesh
 {
     int startIndex;
 };
 
-struct GPUTextureOneVao : GPUTexture
+struct GPUTextureMultiDraw : GPUTexture
 {
     GLuint data;
 };
 
-struct GPUMaterialOneVao : GPUMaterial
+struct GPUMaterialMultiDraw : GPUMaterial
 {
 };
 
-class RendererMultiDraw : public RendererInterface
+class RendererModelVAO : public RendererInterface
 {
 private:
     GLuint program;
-    GLuint VBO, VAO;
+    GLuint VAO;
+    GLuint VBO, matricesVBO;
 
     std::vector<Object> staticObjects;
 
 public:
-    RendererMultiDraw(const char* shader);
-    ~RendererMultiDraw() override;
+    RendererModelVAO(const char* shader);
+    ~RendererModelVAO() override;
 
     // Les objets statiques ne bougent pas est sont passé une seul fois au renderer
     void SetStaticObjects(const std::vector<Object>& staticObjects) override;
@@ -36,6 +37,7 @@ public:
 
     void loadShader(const char* shader);
     void createVAO();
+    void createModelVAO();
 
     //create gpu version of mesh, material and texture (VAO, VBO, EBO, ...)
     GPUMesh* CreateMesh(const Mesh& mesh) override;

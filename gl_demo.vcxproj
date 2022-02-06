@@ -88,6 +88,7 @@
     <ClInclude Include="externals\src\imstb_truetype.h" />
     <ClInclude Include="src\demo.hpp" />
     <ClInclude Include="src\demo_renderer_basic.hpp" />
+    <ClInclude Include="src\demo_renderer_modelvao.hpp" />
     <ClInclude Include="src\demo_renderer_multidraw.hpp" />
     <ClInclude Include="src\demo_renderer_onevao.hpp" />
     <ClInclude Include="src\demo_test.hpp" />
@@ -96,6 +97,7 @@
     <ClInclude Include="src\object.hpp" />
     <ClInclude Include="src\renderer_basic.hpp" />
     <ClInclude Include="src\renderer_interface.hpp" />
+    <ClInclude Include="src\renderer_modelvao.hpp" />
     <ClInclude Include="src\renderer_multidraw.hpp" />
     <ClInclude Include="src\renderer_onevao.hpp" />
     <ClInclude Include="src\scene.hpp" />
@@ -113,12 +115,14 @@
     <ClCompile Include="externals\src\imgui_impl_opengl3.cpp" />
     <ClCompile Include="externals\src\tiny_obj_loader.cpp" />
     <ClCompile Include="src\demo_renderer_basic.cpp" />
+    <ClCompile Include="src\demo_renderer_modelvao.cpp" />
     <ClCompile Include="src\demo_renderer_multidraw.cpp" />
     <ClCompile Include="src\demo_renderer_onevao.cpp" />
     <ClCompile Include="src\demo_test.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\memleaks.cpp" />
     <ClCompile Include="src\renderer_basic.cpp" />
+    <ClCompile Include="src\renderer_modelvao.cpp" />
     <ClCompile Include="src\renderer_multidraw.cpp" />
     <ClCompile Include="src\renderer_onevao.cpp" />
     <ClCompile Include="src\scene.cpp" />

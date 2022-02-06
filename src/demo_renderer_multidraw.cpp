@@ -6,7 +6,7 @@
 
 DemoRendererMultiDraw::DemoRendererMultiDraw()
 {
-	scene = new Scene(*(new RendererMultiDraw("multidraw")));
+	scene = new Scene(*(new RendererMultiDraw("basic")));
 }
 
 DemoRendererMultiDraw::~DemoRendererMultiDraw()

@@ -13,6 +13,7 @@
 // NOTES: Placez vos includes ici et modifiez demoList dans le main(), et n'oubliez pas de modifier le Makefile
 #include "demo_renderer_basic.hpp"
 #include "demo_renderer_onevao.hpp"
+#include "demo_renderer_modelvao.hpp"
 #include "demo_renderer_multidraw.hpp"
 
 #include "memleaks.hpp"
@@ -73,10 +74,11 @@ int main(int argc, char* argv[])
         new DemoTest(),
         new DemoRendererBasic(),
         new DemoRendererOneVao(),
+        new DemoRendererModelVao(),
         new DemoRendererMultiDraw(),
     };
 
-    int demoIndex = 3; // Start index
+    int demoIndex = 0; // Start index
     int demoCount = IM_ARRAYSIZE(demoList);
 
     while (glfwWindowShouldClose(window) == false)

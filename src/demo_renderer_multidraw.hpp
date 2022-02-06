@@ -13,6 +13,6 @@ public:
     DemoRendererMultiDraw();
     ~DemoRendererMultiDraw() override;
 
-    const char* name() override { return "Renderer multi draw"; };
+    const char* name() override { return "Renderer multidraw"; };
     void display() override;
 };
